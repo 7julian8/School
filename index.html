@@ -1,1 +1,146 @@
-Hello World!
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Upload und Passwortschutz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      display: flex;
+      justify-content: flex-end;
+      padding: 10px;
+      background-color: #007BFF;
+    }
+
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Passwortschutz-Overlay */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .password-box {
+      background-color: white;
+      padding: 20px;
+      border-radius: 5px;
+      text-align: center;
+    }
+
+    input[type="password"] {
+      padding: 10px;
+      margin-bottom: 10px;
+      width: 100%;
+      border: 1px solid #ddd;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    ul li {
+      background-color: #e9ecef;
+      margin: 5px;
+      padding: 10px;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    ul li span {
+      flex-grow: 1;
+    }
+
+    ul li button {
+      background-color: #dc3545;
+    }
+  </style>
+</head>
+<body>
+  <!-- Passwortabfrage -->
+  <div id="password-protection" class="overlay">
+    <div class="password-box">
+      <h2>Passwort eingeben</h2>
+      <input type="password" id="password" placeholder="Passwort">
+      <button onclick="checkPassword()">Eingeben</button>
+    </div>
+  </div>
+
+  <!-- Hauptinhalt der Seite -->
+  <div id="main-content" style="display: none;">
+    <header>
+      <button id="upload-btn" onclick="document.getElementById('pdf-upload').click()">PDF hochladen</button>
+      <input type="file" id="pdf-upload" accept=".pdf" style="display:none;" onchange="uploadPDF()">
+    </header>
+
+    <section>
+      <h1>Hochgeladene PDFs</h1>
+      <ul id="pdf-list"></ul>
+    </section>
+  </div>
+
+  <script>
+    // Passwort Überprüfung
+    function checkPassword() {
+      const password = document.getElementById('password').value;
+      if (password === '7e') {
+        document.getElementById('password-protection').style.display = 'none';
+        document.getElementById('main-content').style.display = 'block';
+      } else {
+        alert('Falsches Passwort');
+      }
+    }
+
+    // Dummy-Funktion für PDF-Upload (Server-Skript erforderlich)
+    function uploadPDF() {
+      const fileInput = document.getElementById('pdf-upload');
+      const file = fileInput.files[0];
+
+      if (file && file.type === 'application/pdf') {
+        // Temporäre Anzeige auf der Seite (Server-Upload erforderlich)
+        const listItem = document.createElement('li');
+        listItem.innerHTML = `<span>${file.name} (wird nach 48 Stunden gelöscht)</span> <button onclick="downloadPDF()">Download</button>`;
+        document.getElementById('pdf-list').appendChild(listItem);
+
+        alert('PDF wurde erfolgreich hochgeladen. Es wird nach 48 Stunden automatisch gelöscht.');
+
+        // Hier würde ein Server-Upload erfolgen
+      } else {
+        alert('Bitte eine PDF-Datei hochladen');
+      }
+    }
+
+    // Dummy-Funktion für den PDF-Download (Server-Skript erforderlich)
+    function downloadPDF() {
+      alert('Du lädst diese PDF-Datei herunter. Beachte, dass sie nach 48 Stunden gelöscht wird.');
+    }
+  </script>
+</body>
+</html>
+
